@@ -1,0 +1,34 @@
+name: Funcionalidad
+description: Algo nuevo que construir. Si no es Must del hito en curso, va al backlog.
+labels: ["type:feature"]
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto
+      description: Qué problema resuelve y para quién. Enlaza la sección de los documentos y las decisiones (D#) que aplican.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      description: Cada punto debe poder comprobarse en una demo o con un test.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencias
+      description: Issues que deben cerrarse antes (#n). Escribe "Ninguna" si no hay.
+    validations:
+      required: true
+  - type: input
+    id: estimate
+    attributes:
+      label: Estimación (horas)
+      placeholder: "4"
+    validations:
+      required: true

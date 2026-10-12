@@ -1,0 +1,22 @@
+# Line endings: LF in the repository and in the working tree.
+# The team works on Windows and CI runs on Linux; without this, Git would
+# report "changes" in files nobody touched.
+* text=auto eol=lf
+
+# cmd.exe scripts need CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Binary files: never normalized or diffed as text.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.woff binary
+*.woff2 binary
+*.mp4 binary

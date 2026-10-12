@@ -1,0 +1,33 @@
+name: Petición de diseño
+description: Un cambio de diseño que pidió la agencia (D24).
+labels: ["type:design-feedback"]
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: Qué pidió la agencia
+      description: Con sus palabras, y la fecha en que lo pidió.
+    validations:
+      required: true
+  - type: textarea
+    id: where
+    attributes:
+      label: Dónde
+      description: Página y sección, con una captura.
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Clasificación
+      description: Si un cambio de token requiere código, el sistema de tema falló y hay que revisarlo.
+      options:
+        - Token (se resuelve desde el panel, sin código)
+        - Variante (código: otra variante de una sección existente)
+        - Estructural (código: algo que hoy no existe)
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notas
