@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds and caches
+dist/
+build/
+out/
+.next/
+.open-next/
+.turbo/
+.wrangler/
+coverage/
+*.tsbuildinfo
+
+# Environment variables: only .env.example is committed
+.env
+.env.*
+!.env.example
+
+# Supabase CLI local state
+**/supabase/.branches/
+**/supabase/.temp/
+
+# Logs
+*.log
+
+# Playwright
+playwright-report/
+test-results/
+
+# OS and editors
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# Claude Code personal settings
+.claude/settings.local.json

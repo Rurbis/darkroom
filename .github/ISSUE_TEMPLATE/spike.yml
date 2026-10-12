@@ -1,0 +1,36 @@
+name: Spike
+description: Experimento corto para resolver una incógnita técnica antes de construir.
+labels: ["type:spike"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Pregunta que responde
+      description: Una sola pregunta concreta. Ejemplo, "¿cabe la app de Next en Workers Free con OpenNext?".
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Criterio de éxito
+      description: Qué números u observaciones deciden la respuesta.
+    validations:
+      required: true
+  - type: input
+    id: timebox
+    attributes:
+      label: Límite de tiempo (horas)
+      description: Al llegar al límite se cierra con lo aprendido, aunque la respuesta sea "no sabemos".
+      placeholder: "6"
+    validations:
+      required: true
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: Qué se entrega
+      value: |
+        - Comentario en esta issue con números, capturas y veredicto.
+        - ADR si cambia una decisión.
+        - La rama spike/… nunca se mezcla a main.
+    validations:
+      required: true
