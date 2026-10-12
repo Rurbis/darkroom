@@ -1,6 +1,6 @@
 name: Funcionalidad
 description: Algo nuevo que construir. Si no es Must del hito en curso, va al backlog.
-labels: ["type:feature"]
+labels: ['type:feature']
 body:
   - type: textarea
     id: context
@@ -29,6 +29,6 @@ body:
     id: estimate
     attributes:
       label: Estimación (horas)
-      placeholder: "4"
+      placeholder: '4'
     validations:
       required: true
