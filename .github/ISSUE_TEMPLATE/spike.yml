@@ -1,6 +1,6 @@
 name: Spike
 description: Experimento corto para resolver una incógnita técnica antes de construir.
-labels: ["type:spike"]
+labels: ['type:spike']
 body:
   - type: textarea
     id: question
@@ -21,7 +21,7 @@ body:
     attributes:
       label: Límite de tiempo (horas)
       description: Al llegar al límite se cierra con lo aprendido, aunque la respuesta sea "no sabemos".
-      placeholder: "6"
+      placeholder: '6'
     validations:
       required: true
   - type: textarea

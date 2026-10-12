@@ -1,6 +1,6 @@
 name: Error
 description: Algo que no funciona como debería.
-labels: ["type:bug"]
+labels: ['type:bug']
 body:
   - type: textarea
     id: what

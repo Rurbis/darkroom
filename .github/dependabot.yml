@@ -4,35 +4,35 @@
 # github-actions entry once there are workflows (issue #4). Revisit both then.
 version: 2
 updates:
-  - package-ecosystem: "npm"
+  - package-ecosystem: 'npm'
     directories:
-      - "/"
-      - "/apps/*"
-      - "/packages/*"
+      - '/'
+      - '/apps/*'
+      - '/packages/*'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Mexico_City"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/Mexico_City'
     open-pull-requests-limit: 5
     groups:
       npm-dependencies:
-        patterns: ["*"]
-    labels: ["type:chore", "area:infra"]
+        patterns: ['*']
+    labels: ['type:chore', 'area:infra']
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Mexico_City"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/Mexico_City'
     open-pull-requests-limit: 5
     groups:
       github-actions:
-        patterns: ["*"]
-    labels: ["type:chore", "area:infra"]
+        patterns: ['*']
+    labels: ['type:chore', 'area:infra']
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
