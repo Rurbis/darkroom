@@ -1,0 +1,7 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Fail the install when Node or pnpm do not match "engines" in package.json,
+# so nobody works with a different version without noticing (D114).
+engineStrict: true

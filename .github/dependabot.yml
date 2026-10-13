@@ -1,38 +1,41 @@
 # Weekly dependency updates, grouped to avoid flooding the repo with PRs.
 # No auto-merge: reading each changelog is part of the learning (Phase 2 §1).
-# The npm entry starts working once the monorepo exists (issue #2), and the
-# github-actions entry once there are workflows (issue #4). Revisit both then.
+# The github-actions entry starts working once there are workflows (issue #4).
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directories:
-      - "/"
-      - "/apps/*"
-      - "/packages/*"
+  # pnpm resolves the whole workspace from the root lockfile, so the root
+  # directory covers every app and package.
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Mexico_City"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/Mexico_City'
     open-pull-requests-limit: 5
     groups:
       npm-dependencies:
-        patterns: ["*"]
-    labels: ["type:chore", "area:infra"]
+        patterns: ['*']
+    ignore:
+      # typescript-eslint and ts-jest do not support TypeScript 7 yet (D115).
+      # Remove this rule once typescript-eslint accepts typescript@7.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+    labels: ['type:chore', 'area:infra']
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "09:00"
-      timezone: "America/Mexico_City"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+      timezone: 'America/Mexico_City'
     open-pull-requests-limit: 5
     groups:
       github-actions:
-        patterns: ["*"]
-    labels: ["type:chore", "area:infra"]
+        patterns: ['*']
+    labels: ['type:chore', 'area:infra']
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'

@@ -1,6 +1,6 @@
 name: Petición de diseño
 description: Un cambio de diseño que pidió la agencia (D24).
-labels: ["type:design-feedback"]
+labels: ['type:design-feedback']
 body:
   - type: textarea
     id: request

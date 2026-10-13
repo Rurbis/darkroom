@@ -17,7 +17,7 @@ Closes #
 - [ ] Issue enlazada (`Closes #N`) y el cambio es Must del hito en curso, o tiene una excepción acordada.
 - [ ] CI en verde, con tests de lo crítico que toca.
 - [ ] Toda consulta nueva filtra por el `agency_id` del contexto, nunca del body.
-- [ ] Todo payload nuevo tiene su esquema Zod en `@darkroom/shared` y se valida en Nest.
+- [ ] Todo payload nuevo tiene su esquema Zod en `@focaldrop/shared` y se valida en Nest.
 - [ ] Los textos de interfaz están en el diccionario `es-MX`, no en el componente.
 - [ ] Nada de la agencia en el código; sin secretos ni datos reales.
 - [ ] Si toca la interfaz pública o la galería: probado en celular (o en el emulador) y con teclado.
