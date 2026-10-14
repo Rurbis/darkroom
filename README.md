@@ -1,5 +1,7 @@
 # Focal Drop
 
+[![CI](https://github.com/Rurbis/focaldrop/actions/workflows/ci.yml/badge.svg)](https://github.com/Rurbis/focaldrop/actions/workflows/ci.yml)
+
 Multi-tenant platform for photography agencies: a public website for each agency and private, expiring galleries to deliver photos and videos to their clients.
 
 > **Work in progress.** Currently building milestone 0 (foundations). Full documentation, in English and Spanish, arrives with issue #23.
