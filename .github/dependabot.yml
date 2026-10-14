@@ -21,6 +21,10 @@ updates:
       # Remove this rule once typescript-eslint accepts typescript@7.
       - dependency-name: 'typescript'
         update-types: ['version-update:semver-major']
+      # The Cloudflare Workers test pool (zip-worker, D107) only supports Vitest 4.
+      # Remove this rule once @cloudflare/vitest-pool-workers accepts vitest@5.
+      - dependency-name: 'vitest'
+        update-types: ['version-update:semver-major']
     labels: ['type:chore', 'area:infra']
     commit-message:
       prefix: 'chore(deps)'
