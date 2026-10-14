@@ -6,7 +6,8 @@
 #
 # It is safe to run again: every step checks what already exists.
 # Creates no keys: GitHub Actions authenticates through Workload Identity
-# Federation (D105). Details and reasons are in README.md next to this file.
+# Federation (D105). It also installs the billing guard, which disables billing
+# when the budget is exceeded (D87). Details are in README.md next to this file.
 set -euo pipefail
 
 : "${PROJECT_ID:?Set PROJECT_ID, for example: PROJECT_ID=focaldrop bash infra/gcp/bootstrap.sh}"
@@ -15,6 +16,7 @@ REGION='us-east4'                # Next to Supabase us-east-1 (D41, D63)
 AR_REPO='focaldrop'              # Artifact Registry repository for the API images
 POOL='github'                    # Workload Identity pool
 PROVIDER='github-actions'        # OIDC provider inside the pool
+BUDGET_TOPIC='billing-alerts'    # Pub/Sub topic the budget publishes to
 # Immutable GitHub IDs of Rurbis/focaldrop. Names can be renamed or reused;
 # IDs cannot, so access is granted by ID.
 GITHUB_REPO_ID='1414983088'
@@ -23,6 +25,7 @@ GITHUB_OWNER_ID='263442215'
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RUNTIME_SA="focaldrop-api-runtime@${PROJECT_ID}.iam.gserviceaccount.com"
 DEPLOYER_SA="github-deployer@${PROJECT_ID}.iam.gserviceaccount.com"
+GUARD_SA="billing-guard@${PROJECT_ID}.iam.gserviceaccount.com"
 
 step() { printf '\n==> %s\n' "$1"; }
 
@@ -38,7 +41,18 @@ gcloud services enable \
   iam.googleapis.com \
   iamcredentials.googleapis.com \
   sts.googleapis.com \
-  cloudresourcemanager.googleapis.com
+  cloudresourcemanager.googleapis.com \
+  cloudbilling.googleapis.com \
+  pubsub.googleapis.com \
+  cloudfunctions.googleapis.com \
+  cloudbuild.googleapis.com \
+  eventarc.googleapis.com
+
+BILLING_ACCOUNT="$(gcloud billing projects describe "${PROJECT_ID}" --format='value(billingAccountName)')"
+if [[ -z "${BILLING_ACCOUNT}" ]]; then
+  echo 'ERROR: link the project to a billing account first (console: Billing).' >&2
+  exit 1
+fi
 
 step "Artifact Registry repository ${AR_REPO} (${REGION})"
 if ! gcloud artifacts repositories describe "${AR_REPO}" --location="${REGION}" >/dev/null 2>&1; then
@@ -65,6 +79,8 @@ create_sa() {
 create_sa "${RUNTIME_SA}" 'Focal Drop API (Cloud Run runtime)'
 # Identity that GitHub Actions impersonates to deploy.
 create_sa "${DEPLOYER_SA}" 'GitHub Actions deployer'
+# Identity of the billing guard function.
+create_sa "${GUARD_SA}" 'Billing guard (disables billing over budget)'
 
 step 'Least-privilege roles for the deployer'
 # Deploy Cloud Run services. It cannot change who may invoke them: making the
@@ -104,8 +120,42 @@ gcloud iam service-accounts add-iam-policy-binding "${DEPLOYER_SA}" \
   --role='roles/iam.workloadIdentityUser' \
   --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/${POOL}/attribute.repository_id/${GITHUB_REPO_ID}" >/dev/null
 
+step "Billing guard (${BUDGET_TOPIC} -> billing-guard)"
+if ! gcloud pubsub topics describe "${BUDGET_TOPIC}" >/dev/null 2>&1; then
+  gcloud pubsub topics create "${BUDGET_TOPIC}"
+fi
+# Unlinking billing needs Project Billing Manager + Browser on the project and
+# Billing Account Viewer on the billing account; nothing broader.
+for role in roles/billing.projectManager roles/browser; do
+  gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+    --member="serviceAccount:${GUARD_SA}" \
+    --role="${role}" \
+    --condition=None >/dev/null
+done
+gcloud billing accounts add-iam-policy-binding "${BILLING_ACCOUNT#billingAccounts/}" \
+  --member="serviceAccount:${GUARD_SA}" \
+  --role='roles/billing.viewer' >/dev/null
+gcloud functions deploy billing-guard \
+  --gen2 \
+  --runtime=nodejs24 \
+  --region="${REGION}" \
+  --source="${SCRIPT_DIR}/billing-guard" \
+  --entry-point=stopBilling \
+  --trigger-topic="${BUDGET_TOPIC}" \
+  --trigger-service-account="${GUARD_SA}" \
+  --service-account="${GUARD_SA}" \
+  --set-env-vars="GOOGLE_CLOUD_PROJECT=${PROJECT_ID}" \
+  --max-instances=1 \
+  --memory=256Mi \
+  --retry \
+  --quiet
+# The Pub/Sub trigger calls the function as the guard account.
+gcloud functions add-invoker-policy-binding billing-guard \
+  --region="${REGION}" \
+  --member="serviceAccount:${GUARD_SA}" >/dev/null
+
 step 'Checking that no service account keys exist'
-for sa in "${RUNTIME_SA}" "${DEPLOYER_SA}"; do
+for sa in "${RUNTIME_SA}" "${DEPLOYER_SA}" "${GUARD_SA}"; do
   keys="$(gcloud iam service-accounts keys list --iam-account="${sa}" --managed-by=user --format='value(name)')"
   if [[ -n "${keys}" ]]; then
     echo "ERROR: ${sa} has user-managed keys. Delete them: this project uses WIF only." >&2
@@ -126,4 +176,10 @@ GCP_ARTIFACT_REPOSITORY=${REGION}-docker.pkg.dev/${PROJECT_ID}/${AR_REPO}
 GCP_WIF_PROVIDER=${PROVIDER_NAME}
 GCP_DEPLOYER_SA=${DEPLOYER_SA}
 GCP_RUNTIME_SA=${RUNTIME_SA}
+EOF
+
+step 'Next: connect the budget to the billing guard'
+cat <<EOF
+Console > Billing > Budgets & alerts > your budget > Manage notifications >
+"Connect a Pub/Sub topic to this budget" > project ${PROJECT_ID}, topic ${BUDGET_TOPIC}.
 EOF
