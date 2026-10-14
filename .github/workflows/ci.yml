@@ -1,0 +1,73 @@
+# Continuous integration (Phase 2 §6). `quality` and `test` are required
+# checks in the `main` ruleset: a PR cannot be merged while either fails.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# A new push to the same PR cancels the run in progress; runs on main never cancel.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  # Only what changed (`turbo run --affected`): a PR compares against the main
+  # commit it targets, a push to main against the previous commit. Root files
+  # that affect every package are listed in `globalDependencies` (turbo.json).
+  TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+  TURBO_TELEMETRY_DISABLED: '1'
+  HUSKY: '0'
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Full history, so Turborepo can diff against TURBO_SCM_BASE.
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup
+
+      - name: Check formatting
+        run: pnpm format:check
+
+      - name: Lint and typecheck
+        run: pnpm exec turbo run lint typecheck --affected
+
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      # Plain Postgres with the same major version as the Supabase projects (17).
+      # Integration tests apply the migrations to it from scratch (issue #11).
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: focaldrop_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/focaldrop_test
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup
+
+      - name: Test and build
+        run: pnpm exec turbo run test build --affected

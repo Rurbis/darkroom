@@ -2,6 +2,17 @@
   "$schema": "https://turborepo.com/schema.json",
   "ui": "stream",
   "agentGuidance": false,
+  "globalDependencies": [
+    "package.json",
+    "pnpm-lock.yaml",
+    "pnpm-workspace.yaml",
+    ".nvmrc",
+    "tsconfig.base.json",
+    "eslint.config.js",
+    "prettier.config.js",
+    ".github/workflows/ci.yml",
+    ".github/actions/**"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
