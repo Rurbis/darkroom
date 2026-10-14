@@ -1,6 +1,5 @@
 # Weekly dependency updates, grouped to avoid flooding the repo with PRs.
 # No auto-merge: reading each changelog is part of the learning (Phase 2 §1).
-# The github-actions entry starts working once there are workflows (issue #4).
 version: 2
 updates:
   # pnpm resolves the whole workspace from the root lockfile, so the root
@@ -25,8 +24,10 @@ updates:
     commit-message:
       prefix: 'chore(deps)'
 
+  # Workflows live in .github/workflows (covered by '/'); the shared composite
+  # action needs its own entry so its pinned SHAs get updated too.
   - package-ecosystem: 'github-actions'
-    directory: '/'
+    directories: ['/', '/.github/actions/*']
     schedule:
       interval: 'weekly'
       day: 'monday'
