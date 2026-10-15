@@ -71,6 +71,11 @@ export default defineConfig([
     languageOptions: {
       globals: { ...globals.browser },
     },
+    rules: {
+      // Only for the Pages Router; this app uses the App Router alone, and the rule
+      // prints "Pages directory cannot be found" when ESLint runs from the root.
+      '@next/next/no-html-link-for-pages': 'off',
+    },
   },
   {
     // Plain JavaScript files (configs, scripts) are linted without type information.
