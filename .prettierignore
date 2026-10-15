@@ -5,3 +5,4 @@ pnpm-lock.yaml
 **/.turbo/
 **/.wrangler/
 **/coverage/
+**/next-env.d.ts
