@@ -328,7 +328,7 @@ Revisión integral de las Partes A y B con la pregunta "¿esto lo pueden constru
 
 - [x] ¿Tiene respaldo propio de lo que entrega? (D15) → Sí, en su PC (D130). Sugerirle una segunda copia.
 - [x] **¿Qué formatos entrega a sus clientes?** → JPG y MP4 (D130): RAW/HEIC/HEVC salen del MVP.
-- [~] Carpeta de muestra: llegaron 5 JPG (fuera del repo). **Faltan videos MP4 de muestra** para S-1 y S-5.
+- [~] Carpeta de muestra: llegaron 5 JPG (fuera del repo), pero **comprimidos** (1600 px, 0.3–0.5 MB: el tamaño al que WhatsApp reduce las fotos). **Faltan los originales de ~24 MB y 2–3 videos MP4** para S-1 y S-5.
 - [~] Nombre **de la agencia**: provisional, guardado fuera del repo (D130). **Falta el dominio.** El de la plataforma ya está resuelto: Focal Drop, focaldrop.com (D118). El DNS vivirá en Cloudflare: lo requieren el dominio del bucket público y el del Worker de ZIP.
 - [~] Referencias para el moodboard: mandó canales de YouTube, no sitios. Se le proponen 5 sitios para que elija (D130).
 - [ ] Revisión legal del aviso de privacidad (plantilla).
