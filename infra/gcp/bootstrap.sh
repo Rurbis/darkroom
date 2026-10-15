@@ -26,6 +26,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RUNTIME_SA="focaldrop-api-runtime@${PROJECT_ID}.iam.gserviceaccount.com"
 DEPLOYER_SA="github-deployer@${PROJECT_ID}.iam.gserviceaccount.com"
 GUARD_SA="billing-guard@${PROJECT_ID}.iam.gserviceaccount.com"
+BUILDER_SA="function-builder@${PROJECT_ID}.iam.gserviceaccount.com"
 
 step() { printf '\n==> %s\n' "$1"; }
 
@@ -74,13 +75,18 @@ create_sa() {
     gcloud iam service-accounts create "${email%%@*}" --display-name="${display}"
   fi
 }
-# Identity of the API in Cloud Run. Without it Cloud Run would use the default
-# compute account, which has Editor on the whole project.
+# Every workload gets its own identity instead of the default compute account.
+# In this organization the default account gets no roles (secure-by-default
+# policy iam.automaticIamGrantsForDefaultServiceAccounts), so relying on it
+# would fail; elsewhere it would get Editor on the whole project.
+# Identity of the API in Cloud Run.
 create_sa "${RUNTIME_SA}" 'Focal Drop API (Cloud Run runtime)'
 # Identity that GitHub Actions impersonates to deploy.
 create_sa "${DEPLOYER_SA}" 'GitHub Actions deployer'
 # Identity of the billing guard function.
 create_sa "${GUARD_SA}" 'Billing guard (disables billing over budget)'
+# Identity Cloud Build uses to build the billing guard function.
+create_sa "${BUILDER_SA}" 'Builds the billing guard function'
 
 step 'Least-privilege roles for the deployer'
 # Deploy Cloud Run services. It cannot change who may invoke them: making the
@@ -135,7 +141,14 @@ done
 gcloud billing accounts add-iam-policy-binding "${BILLING_ACCOUNT#billingAccounts/}" \
   --member="serviceAccount:${GUARD_SA}" \
   --role='roles/billing.viewer' >/dev/null
+# Cloud Build needs its own identity to build the function (see the note above
+# about the default compute account).
+gcloud projects add-iam-policy-binding "${PROJECT_ID}" \
+  --member="serviceAccount:${BUILDER_SA}" \
+  --role='roles/cloudbuild.builds.builder' \
+  --condition=None >/dev/null
 gcloud functions deploy billing-guard \
+  --build-service-account="projects/${PROJECT_ID}/serviceAccounts/${BUILDER_SA}" \
   --gen2 \
   --runtime=nodejs24 \
   --region="${REGION}" \
@@ -155,7 +168,7 @@ gcloud functions add-invoker-policy-binding billing-guard \
   --member="serviceAccount:${GUARD_SA}" >/dev/null
 
 step 'Checking that no service account keys exist'
-for sa in "${RUNTIME_SA}" "${DEPLOYER_SA}" "${GUARD_SA}"; do
+for sa in "${RUNTIME_SA}" "${DEPLOYER_SA}" "${GUARD_SA}" "${BUILDER_SA}"; do
   keys="$(gcloud iam service-accounts keys list --iam-account="${sa}" --managed-by=user --format='value(name)')"
   if [[ -n "${keys}" ]]; then
     echo "ERROR: ${sa} has user-managed keys. Delete them: this project uses WIF only." >&2
