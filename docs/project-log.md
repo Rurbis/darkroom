@@ -4,8 +4,8 @@
 >
 > **Repo público:** aquí van decisiones y sus razones, nunca datos personales ni detalles operativos de las cuentas (quién paga, datos fiscales, dónde vive el 2FA, cuentas de recuperación). Eso vive en el gestor de contraseñas del equipo.
 
-- **Última actualización:** 2026-10-14
-- **Estado:** Fases 1 y 2 **aprobadas (2026-10-11)** · **Fase 3 en curso: hito 0** · #1 ✅ (1.25 h) · #2 ✅ (≈ 1.5 h) · #5 ✅ (1.25 h) · #6 ✅ (1 h) · #30 ✅ (1 h) · #9 ✅ (1.5 h) · #3 ✅ (≈ 1.25 h) · #4 ✅ (≈ 1.25 h) · **siguiente para el dueño del repo: #7** (Google Cloud).
+- **Última actualización:** 2026-10-15
+- **Estado:** Fases 1 y 2 **aprobadas (2026-10-11)** · **Fase 3 en curso: hito 0** · #1 ✅ (1.25 h) · #2 ✅ (≈ 1.5 h) · #5 ✅ (1.25 h) · #6 ✅ (1 h) · #30 ✅ (1 h) · #9 ✅ (1.5 h) · #3 ✅ (≈ 1.25 h) · #4 ✅ (≈ 1.25 h) · **en revisión:** #7 (PR #33), #17 (PR #35) y #23 parcial (PR #36) · S-4 (#21) parcial (D129) · **siguiente para el dueño del repo: #25** (ADRs) mientras Fabian avanza la #8 y la #10.
 - **Nombre de la plataforma:** **Focal Drop** (D118), identificador técnico `focaldrop`. Antes: nombre en clave `darkroom` (D98).
 - **Repo:** https://github.com/Rurbis/focaldrop (local: `…\Fotos Jr\focaldrop`) · **Tablero:** https://github.com/users/Rurbis/projects/1
 
@@ -45,7 +45,7 @@ Refinado en D1/D5: **todo gratis durante el desarrollo; se paga al lanzar o cuan
 |---|---|
 | **1 · Producto y arquitectura** | ✅ **Aprobada el 2026-10-11** (Partes A v3.1, B v1.2 y C v1.1; revisión de alcance D82–D90) |
 | **2 · Metodología y división del trabajo** | ✅ **Aprobada el 2026-10-11** (documento v1.1; D98–D110) |
-| **3 · Ejecución** | 🟡 Hito 0 en curso desde el 2026-10-11 (Fase 2 §9). Cerradas: #1–#6, #9 y #30. Siguiente: #7. Tiempos reales en §10. |
+| **3 · Ejecución** | 🟡 Hito 0 en curso desde el 2026-10-11 (Fase 2 §9). Cerradas: #1–#6, #9 y #30. En revisión: #7, #17 y #23 (parcial). Siguiente: #25. Tiempos reales en §10. |
 
 Documentos de la Fase 1:
 - [phase-1a-architecture.md](phase-1a-architecture.md): Parte A, arquitectura (v3.1 ✅).
@@ -339,7 +339,8 @@ Revisión integral de las Partes A y B con la pregunta "¿esto lo pueden constru
   - cuenta de pago activa y proyecto `focaldrop`;
   - script corrido en Cloud Shell y presupuesto de MX$100 conectado a `billing-alerts`;
   - corte probado de verdad: `No action` con 10 de 100; con 150 de 100, `billingEnabled = False`; se vinculó otra vez y quedó en `True`, con la función `ACTIVE`.
-  - Para la #16: variables `GCP_*` en Bitwarden, `--max-instances=2` y `--no-invoker-iam-check`. Fabian tiene desbloqueadas la #8 y la #10, y con la #10 la #11. Quedan para el dueño del repo: #7, #17–#23, #25 y #27.
+  - Para la #16: variables `GCP_*` en Bitwarden, `--max-instances=2` y `--no-invoker-iam-check`. Fabian tiene desbloqueadas la #8 y la #10, y con la #10 la #11.
+  - **En revisión de Fabian (2026-10-15):** PR #33 (#7), PR #35 (#17) y PR #36 (#23 parcial), que se mezclan en ese orden. Quedan para el dueño del repo: #18–#20 (esperan la #8, la #12, la #13 y la #15), el resto de S-4 (#21, después de la #20), #22, el resto de la #23, #25 y #27. **Sin depender de nadie: #25** (ADR-0002 y 0012; la 0010 sale de S-4).
 - ✅ **#3 y #4 mezcladas (2026-10-14):** Fabian aprobó los dos PRs. PR #32 (CI) en `19bc510`; luego el PR #31 se actualizó con `main`, pasó la CI requerida (typecheck, lint, 46 tests y build; `quality` y `test` en menos de 45 s) y se mezcló en `37b3f58`. **Desbloqueadas para Fabian: #8 y #10; con la #10 también la #11** (esquema del hito 0). **Siguiente para el dueño del repo: #7** (Google Cloud, requiere tarjeta para la facturación).
 - ✅ **#9 cerrada (2026-10-14, 1.5 h):** Sentry `focaldrop` (EE. UU.) con `web`, `api` y `zip-worker`, alertas "high priority" por correo, sin IP y con *scrubbers*; DSN en Bitwarden. UptimeRobot con Google, con el monitor del asistente en pausa. Las cuentas son de los dos (D123); solo una persona entra a Sentry por sus términos; Fabian ve las alertas en el Gmail de la plataforma.
 - ✅ **#30 cerrada (2026-10-13, 1 h):** organización de Supabase **Focal Drop** (Free) con MFA del dueño del repo; proyecto `focaldrop-staging` en `us-east-1`; registro público apagado; Data API apagada; solo llaves nuevas (las legacy desactivadas); JWT ES256 verificado; todo en Bitwarden (D121). **Pendiente de Fabian:** aceptar la invitación a Supabase (Administrator) con su propia cuenta y el mismo correo, y activar su MFA.
