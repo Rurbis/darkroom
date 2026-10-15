@@ -1,0 +1,23 @@
+// Spike S-4 (#21): Next.js on Cloudflare Workers Free with OpenNext.
+// This branch never merges; the real configuration comes with #22.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "focaldrop-web-spike",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-30",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "focaldrop-web-spike",
+    },
+  ],
+  // Workers Logs record the CPU time of every request: the number S-4 measures.
+  "observability": {
+    "enabled": true,
+  },
+}

@@ -5,3 +5,14 @@ packages:
 # Fail the install when Node or pnpm do not match "engines" in package.json,
 # so nobody works with a different version without noticing (D114).
 engineStrict: true
+
+# Spike S-4: sharp (Next's optional native image optimizer) cannot run in a
+# Worker, and OpenNext's bundler follows pnpm's links straight to it.
+ignoredOptionalDependencies:
+  - sharp
+# Keep sharp out of pnpm's shared hoisting folder so Next cannot reach the copy
+# that wrangler brings for local previews.
+hoistPattern:
+  - '*'
+  - '!sharp'
+  - '!@img/*'

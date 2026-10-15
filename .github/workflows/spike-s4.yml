@@ -1,0 +1,48 @@
+# Spike S-4 (#21): build the web app with OpenNext on Linux, measure the Worker
+# size and request the pages inside the Workers runtime. Lives only on the
+# spike branch, which never merges. No secrets: nothing is deployed.
+name: Spike S-4
+
+on:
+  push:
+    branches: [spike/opennext-workers]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: '1'
+  HUSKY: '0'
+
+jobs:
+  opennext:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: ./.github/actions/setup
+
+      - name: OpenNext build
+        working-directory: apps/web
+        run: pnpm cf:build
+
+      - name: Worker size (dry run)
+        working-directory: apps/web
+        run: pnpm cf:size
+
+      - name: Request the pages in the Workers runtime
+        working-directory: apps/web
+        run: |
+          pnpm exec wrangler dev --port 8787 > dev.log 2>&1 &
+          for i in $(seq 1 90); do
+            curl -s -o /dev/null http://127.0.0.1:8787/ && break
+            sleep 1
+          done
+          for path in / /admin; do
+            code=$(curl -s -o page.html -w '%{http_code}' "http://127.0.0.1:8787$path")
+            echo "$path -> HTTP $code $(grep -o '<title>[^<]*</title>' page.html || true)"
+          done
+          echo '--- errors in the Workers runtime log ---'
+          grep -i -E 'error|exception' dev.log || echo 'none'
