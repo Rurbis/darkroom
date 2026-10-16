@@ -57,6 +57,10 @@ gcloud billing projects describe "$PROJECT_ID" --format='value(billingEnabled)'
 # Then link the billing account again in the console (Billing > Link a billing account).
 ```
 
+### Billing guard dependencies
+
+`billing-guard/package.json` overrides `uuid` to 11.1.1. `cloudevents` 10.0.0, pulled in by `@google-cloud/functions-framework` 5.0.5 (both are the latest versions), still asks for `uuid@^8.3.2`, which Dependabot flags (GHSA-w5hq-g745-h8pq) and cannot update. The flaw only affects `v3`, `v5` and `v6` called with a `buf` argument; `cloudevents` only calls `v4()`, and 11.1.1 still ships the CommonJS build it loads. Remove the override once `cloudevents` accepts `uuid` 11.1.1 or later. Dependency changes reach the deployed function the next time `bootstrap.sh` runs.
+
 ## Not here
 
 - **Billing and budget** are set in the console. After the script runs, connect the budget to the `billing-alerts` topic (_Manage notifications_).
