@@ -3,9 +3,10 @@
 version: 2
 updates:
   # pnpm resolves the whole workspace from the root lockfile, so the root
-  # directory covers every app and package.
+  # directory covers every app and package. The billing guard function is not
+  # part of the workspace (Google builds it with npm), so it has its own entry.
   - package-ecosystem: 'npm'
-    directory: '/'
+    directories: ['/', '/infra/gcp/billing-guard']
     schedule:
       interval: 'weekly'
       day: 'monday'
