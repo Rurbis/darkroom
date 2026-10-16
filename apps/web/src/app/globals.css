@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+
+/*
+ * Neutral platform styles (D39). The admin panel never uses an agency theme;
+ * agency themes arrive with the public site (milestone 2) as CSS variables.
+ */
+@layer base {
+  body {
+    @apply bg-neutral-50 text-neutral-900 antialiased;
+  }
+}

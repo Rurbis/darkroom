@@ -1,0 +1,15 @@
+{
+  "name": "focaldrop-billing-guard",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Disables billing on the Google Cloud project when the monthly budget is exceeded.",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "@google-cloud/billing": "6.1.1",
+    "@google-cloud/functions-framework": "5.0.5"
+  }
+}

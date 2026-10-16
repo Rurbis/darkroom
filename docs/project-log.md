@@ -5,7 +5,7 @@
 > **Repo público:** aquí van decisiones y sus razones, nunca datos personales ni detalles operativos de las cuentas (quién paga, datos fiscales, dónde vive el 2FA, cuentas de recuperación). Eso vive en el gestor de contraseñas del equipo.
 
 - **Última actualización:** 2026-10-15
-- **Estado:** Fases 1 y 2 **aprobadas (2026-10-11)** · **Fase 3 en curso: hito 0** · #1 ✅ (1.25 h) · #2 ✅ (≈ 1.5 h) · #5 ✅ (1.25 h) · #6 ✅ (1 h) · #30 ✅ (1 h) · #9 ✅ (1.5 h) · #3 ✅ (≈ 1.25 h) · #4 ✅ (≈ 1.25 h) · **en revisión:** #7 (PR #33), #17 (PR #35) y #23 parcial (PR #36) · S-4 (#21) parcial (D129) · **siguiente para el dueño del repo: #25** (ADRs) mientras Fabian avanza la #8 y la #10.
+- **Estado:** Fases 1 y 2 **aprobadas (2026-10-11)** · **Fase 3 en curso: hito 0** · #1 ✅ (1.25 h) · #2 ✅ (≈ 1.5 h) · #5 ✅ (1.25 h) · #6 ✅ (1 h) · #30 ✅ (1 h) · #9 ✅ (1.5 h) · #3 ✅ (≈ 1.25 h) · #4 ✅ (≈ 1.25 h) · #7 ✅ (≈ 2 h) · #17 ✅ (≈ 1 h) · **en revisión:** #23 parcial (PR #36), #25 parcial (PR #37) y #8 de Fabian (PR #38) · S-4 (#21) parcial (D129) · **siguiente para el dueño del repo:** probar el PR #38 en su máquina (Docker Desktop) y después la #18.
 - **Nombre de la plataforma:** **Focal Drop** (D118), identificador técnico `focaldrop`. Antes: nombre en clave `darkroom` (D98).
 - **Repo:** https://github.com/Rurbis/focaldrop (local: `…\Fotos Jr\focaldrop`) · **Tablero:** https://github.com/users/Rurbis/projects/1
 
@@ -45,7 +45,7 @@ Refinado en D1/D5: **todo gratis durante el desarrollo; se paga al lanzar o cuan
 |---|---|
 | **1 · Producto y arquitectura** | ✅ **Aprobada el 2026-10-11** (Partes A v3.1, B v1.2 y C v1.1; revisión de alcance D82–D90) |
 | **2 · Metodología y división del trabajo** | ✅ **Aprobada el 2026-10-11** (documento v1.1; D98–D110) |
-| **3 · Ejecución** | 🟡 Hito 0 en curso desde el 2026-10-11 (Fase 2 §9). Cerradas: #1–#6, #9 y #30. En revisión: #7, #17 y #23 (parcial). Siguiente: #25. Tiempos reales en §10. |
+| **3 · Ejecución** | 🟡 Hito 0 en curso desde el 2026-10-11 (Fase 2 §9). Cerradas: #1–#7, #9, #17 y #30. En revisión: #23 y #25 (parciales) y #8 (Fabian). Siguiente: probar el PR #38 y la #18. Tiempos reales en §10. |
 
 Documentos de la Fase 1:
 - [phase-1a-architecture.md](phase-1a-architecture.md): Parte A, arquitectura (v3.1 ✅).
@@ -335,12 +335,12 @@ Revisión integral de las Partes A y B con la pregunta "¿esto lo pueden constru
 
 ## 7. Pendientes técnicos
 
-- **Fase 3 · Hito 0 (en curso):** issues #1–#27 de la Fase 2 §9, en orden, creadas en GitHub con la misma numeración. ✅ #1–#6, #9 y #30. **#7 en revisión: [PR #33](https://github.com/Rurbis/focaldrop/pull/33)** (D124, D125). Configurado y **probado el 2026-10-14**:
+- **Fase 3 · Hito 0 (en curso):** issues #1–#27 de la Fase 2 §9, en orden, creadas en GitHub con la misma numeración. ✅ #1–#7, #9, #17 y #30. **#7 cerrada (2026-10-15):** PR #33 mezclado en `8318edb` (D124, D125). Configurado y **probado el 2026-10-14**:
   - cuenta de pago activa y proyecto `focaldrop`;
   - script corrido en Cloud Shell y presupuesto de MX$100 conectado a `billing-alerts`;
   - corte probado de verdad: `No action` con 10 de 100; con 150 de 100, `billingEnabled = False`; se vinculó otra vez y quedó en `True`, con la función `ACTIVE`.
   - Para la #16: variables `GCP_*` en Bitwarden, `--max-instances=2` y `--no-invoker-iam-check`. Fabian tiene desbloqueadas la #8 y la #10, y con la #10 la #11.
-  - **En revisión de Fabian (2026-10-15):** PR #33 (#7), PR #35 (#17) y PR #36 (#23 parcial), que se mezclan en ese orden. Quedan para el dueño del repo: #18–#20 (esperan la #8, la #12, la #13 y la #15), el resto de S-4 (#21, después de la #20), #22, el resto de la #23, #25 y #27. **Sin depender de nadie: #25** (ADR-0002 y 0012; la 0010 sale de S-4).
+  - **2026-10-15:** Fabian aprobó los PRs #33, #35, #36 y #37. Mezclados #33 (#7, `8318edb`) y #35 (#17, `dd18907`); el #36 se actualizó con `main` y espera una nueva aprobación, y el #37 (#25 parcial) va después. **PR #38 de Fabian (#8, Supabase local):** el dueño del repo lo prueba en su máquina, que necesita WSL2 y Docker Desktop. Quedan para el dueño del repo: #18–#20 (esperan la #8, la #12, la #13 y la #15), el resto de S-4 (#21, después de la #20), #22, el resto de la #23, la ADR-0010 de la #25 y #27.
 - ✅ **#3 y #4 mezcladas (2026-10-14):** Fabian aprobó los dos PRs. PR #32 (CI) en `19bc510`; luego el PR #31 se actualizó con `main`, pasó la CI requerida (typecheck, lint, 46 tests y build; `quality` y `test` en menos de 45 s) y se mezcló en `37b3f58`. **Desbloqueadas para Fabian: #8 y #10; con la #10 también la #11** (esquema del hito 0). **Siguiente para el dueño del repo: #7** (Google Cloud, requiere tarjeta para la facturación).
 - ✅ **#9 cerrada (2026-10-14, 1.5 h):** Sentry `focaldrop` (EE. UU.) con `web`, `api` y `zip-worker`, alertas "high priority" por correo, sin IP y con *scrubbers*; DSN en Bitwarden. UptimeRobot con Google, con el monitor del asistente en pausa. Las cuentas son de los dos (D123); solo una persona entra a Sentry por sus términos; Fabian ve las alertas en el Gmail de la plataforma.
 - ✅ **#30 cerrada (2026-10-13, 1 h):** organización de Supabase **Focal Drop** (Free) con MFA del dueño del repo; proyecto `focaldrop-staging` en `us-east-1`; registro público apagado; Data API apagada; solo llaves nuevas (las legacy desactivadas); JWT ES256 verificado; todo en Bitwarden (D121). **Pendiente de Fabian:** aceptar la invitación a Supabase (Administrator) con su propia cuenta y el mismo correo, y activar su MFA.
@@ -427,8 +427,9 @@ Horas reales frente a las estimadas, por issue. Es el insumo de la retro de cada
 | #2 Monorepo | R | 4 h | ≈ 1.5 h | ~1 h hasta el PR, con la investigación de versiones (TS 7, pnpm 12); ~0.5 h por el renombre (D118) y por reabrir el PR (#28 → #29). |
 | #5 Google + Bitwarden | R | 1 h | 1.25 h | 0.75 h de Bitwarden + 0.5 h de la cuenta de Google. Incluyó decidir D116–D118. |
 | #6 Cloudflare + dominio | R | 1.5 h | 1 h | Cuenta, focaldrop.com y Turnstile. |
-| #17 Web: esqueleto | R | 3 h | ≈ 1 h hasta el PR | Incluyó revisar la compatibilidad de los plugins de lint con ESLint 10 y verificar en el navegador integrado. Falta la revisión de Fabian (PR #35). |
-| #7 Google Cloud | R | 3 h | ≈ 2 h (dueño) | Consola, Cloud Shell y prueba del corte. Aparte: evaluar alternativas (D124), adaptar el script a la organización (D125) y el *billing guard*. Falta la revisión de Fabian (PR #33). |
+| #17 Web: esqueleto | R | 3 h | ≈ 1 h hasta el PR | Incluyó revisar la compatibilidad de los plugins de lint con ESLint 10 y verificar en el navegador integrado. PR #35 mezclado el 2026-10-15 (`dd18907`). |
+| #7 Google Cloud | R | 3 h | ≈ 2 h (dueño) | Consola, Cloud Shell y prueba del corte. Aparte: evaluar alternativas (D124), adaptar el script a la organización (D125) y el *billing guard*. PR #33 mezclado el 2026-10-15 (`8318edb`). |
+| #25 ADRs 0002, 0010 y 0012 | R | 2 h | ≈ 0.5 h hasta el PR | Parcial: índice y plantilla de `docs/adr/`, ADR-0002 y ADR-0012 (PR #37). La ADR-0010 sale del cierre de S-4. |
 | #9 Sentry + UptimeRobot | R | 1.5 h | 1.5 h | Incluyó revisar los términos de Sentry y UptimeRobot (D123) y adaptar los pasos a las pantallas nuevas de Sentry. |
 | #30 Supabase staging | R | 1 h | 1 h | Incluyó verificar en la documentación los cambios recientes de Supabase (llaves nuevas, JWT asimétrico, Data API). |
 | #4 CI | R | 3 h | ≈ 1.25 h | Incluyó probar cómo detecta Turbo los cambios de la raíz (hallazgo de D122), los checks requeridos y la mezcla. |
@@ -470,3 +471,5 @@ Horas reales frente a las estimadas, por issue. Es el insumo de la retro de cada
 | 2026-10-15 | **#23 (parcial) → PR:** documentos migrados a `docs/` con la bitácora pública limpia, y `README.md` / `README.es.md` con arquitectura, stack, comandos y contribución. Falta la instalación de la BD local (llega con la #8 y la #15). D128. |
 | 2026-10-15 | **S-4 adelantado (#21):** el esqueleto cabe en Workers Free (865 KiB, 28 %) y renderiza en Linux; en Windows nativo OpenNext falla en tiempo de ejecución, así que se compila y despliega solo en CI. Resultados en la #21. D129. |
 | 2026-10-15 | **Respuestas de la agencia:** solo JPG y MP4, fotos de ~24 MB sin compresión y respaldo propio en su PC. RAW/HEIC salen del MVP, ZIP64 pasa a la etapa 1 del ZIP y las galerías se estiman en 7–24 GB. D130. |
+| 2026-10-15 | **#25 (parcial) → PR #37:** `docs/adr/` con reglas, plantilla e índice de los 13 ADRs, más la ADR-0002 (Next.js renderiza, NestJS decide) y la ADR-0012 (MVP por hitos usables). La ADR-0010 queda para el cierre de S-4. |
+| 2026-10-15 | **#7 y #17 cerradas:** Fabian aprobó los PRs #33, #35, #36 y #37 (y mezcló el Dependabot #34, `setup-node` 7.1.0). Mezclados el #33 (`8318edb`) y el #35 (`dd18907`); el #36 se actualizó con `main` (choque en `.prettierignore`) y pide una nueva aprobación. **Fabian abrió el PR #38 (#8, Supabase local):** el dueño del repo lo prueba en su máquina, que primero necesita WSL2 y Docker Desktop. |

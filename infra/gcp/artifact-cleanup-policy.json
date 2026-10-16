@@ -1,0 +1,17 @@
+[
+  {
+    "name": "keep-latest-5",
+    "action": { "type": "Keep" },
+    "mostRecentVersions": { "keepCount": 5 }
+  },
+  {
+    "name": "keep-releases",
+    "action": { "type": "Keep" },
+    "condition": { "tagState": "TAGGED", "tagPrefixes": ["v"] }
+  },
+  {
+    "name": "delete-older-than-30-days",
+    "action": { "type": "Delete" },
+    "condition": { "olderThan": "30d" }
+  }
+]
