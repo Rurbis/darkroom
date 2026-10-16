@@ -1,5 +1,8 @@
 # Weekly dependency updates, grouped to avoid flooding the repo with PRs.
 # No auto-merge: reading each changelog is part of the learning (Phase 2 §1).
+# Cooldown: only versions published at least 14 days ago are proposed, the
+# two-week rule D122 set for actions, now for every dependency (D131).
+# Security updates are not delayed.
 version: 2
 updates:
   # pnpm resolves the whole workspace from the root lockfile, so the root
@@ -13,13 +16,18 @@ updates:
       time: '09:00'
       timezone: 'America/Mexico_City'
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14
     groups:
       npm-dependencies:
         patterns: ['*']
     ignore:
-      # typescript-eslint and ts-jest do not support TypeScript 7 yet (D115).
+      # typescript-eslint does not support TypeScript 7 yet (D115).
       # Remove this rule once typescript-eslint accepts typescript@7.
       - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      # Node types follow the Node major in .nvmrc (D114, D127): bump them together.
+      - dependency-name: '@types/node'
         update-types: ['version-update:semver-major']
       # The Cloudflare Workers test pool (zip-worker, D107) only supports Vitest 4.
       # Remove this rule once @cloudflare/vitest-pool-workers accepts vitest@5.
@@ -39,6 +47,8 @@ updates:
       time: '09:00'
       timezone: 'America/Mexico_City'
     open-pull-requests-limit: 5
+    cooldown:
+      default-days: 14
     groups:
       github-actions:
         patterns: ['*']
