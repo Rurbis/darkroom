@@ -21,6 +21,7 @@ env:
   # that affect every package are listed in `globalDependencies` (turbo.json).
   TURBO_SCM_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
   TURBO_TELEMETRY_DISABLED: '1'
+  NEXT_TELEMETRY_DISABLED: '1'
   HUSKY: '0'
 
 jobs:

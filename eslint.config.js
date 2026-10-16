@@ -3,8 +3,10 @@
 import { builtinModules } from 'node:module';
 
 import js from '@eslint/js';
+import nextPlugin from '@next/eslint-plugin-next';
 import { defineConfig, globalIgnores } from 'eslint/config';
 import prettier from 'eslint-config-prettier/flat';
+import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -19,6 +21,7 @@ export default defineConfig([
     '**/.turbo/',
     '**/.wrangler/',
     '**/coverage/',
+    '**/next-env.d.ts',
   ]),
   js.configs.recommended,
   tseslint.configs.recommendedTypeChecked,
@@ -57,6 +60,21 @@ export default defineConfig([
           message: nodeOnlyMessage,
         })),
       ],
+    },
+  },
+  {
+    // Next.js and React hooks rules for the web app. eslint-config-next is not used:
+    // it pulls eslint-plugin-react and eslint-plugin-import, which do not support
+    // ESLint 10 yet (D115). jsx-a11y joins when it does.
+    files: ['apps/web/**/*.{ts,tsx}'],
+    extends: [nextPlugin.configs['core-web-vitals'], reactHooks.configs.flat.recommended],
+    languageOptions: {
+      globals: { ...globals.browser },
+    },
+    rules: {
+      // Only for the Pages Router; this app uses the App Router alone, and the rule
+      // prints "Pages directory cannot be found" when ESLint runs from the root.
+      '@next/next/no-html-link-for-pages': 'off',
     },
   },
   {
