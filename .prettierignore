@@ -6,3 +6,7 @@ pnpm-lock.yaml
 **/.wrangler/
 **/coverage/
 **/next-env.d.ts
+
+# Long design documents with wide tables: aligning them would turn every
+# one-cell edit of the decision log into a whole-table diff.
+docs/
