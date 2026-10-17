@@ -4,7 +4,7 @@
 >
 > **Repo público:** aquí van decisiones y sus razones, nunca datos personales ni detalles operativos de las cuentas (quién paga, datos fiscales, dónde vive el 2FA, cuentas de recuperación). Eso vive en el gestor de contraseñas del equipo.
 
-- **Última actualización:** 2026-10-16
+- **Última actualización:** 2026-10-17
 - **Estado:** Fases 1 y 2 **aprobadas (2026-10-11)** · **Fase 3 en curso: hito 0** · #1 ✅ (1.25 h) · #2 ✅ (≈ 1.5 h) · #5 ✅ (1.25 h) · #6 ✅ (1 h) · #30 ✅ (1 h) · #9 ✅ (1.5 h) · #3 ✅ (≈ 1.25 h) · #4 ✅ (≈ 1.25 h) · #7 ✅ (≈ 2 h) · #17 ✅ (≈ 1 h) · **en revisión:** #23 parcial (PR #36), #25 parcial (PR #37) y #8 de Fabian (PR #38) · S-4 (#21) parcial (D129) · **siguiente para el dueño del repo:** la #18, que espera el PR #38 (cambios pedidos); el PR #40 (#10 de Fabian) ya está aprobado.
 - **Nombre de la plataforma:** **Focal Drop** (D118), identificador técnico `focaldrop`. Antes: nombre en clave `darkroom` (D98).
 - **Repo:** https://github.com/Rurbis/focaldrop (local: `…\Fotos Jr\focaldrop`) · **Tablero:** https://github.com/users/Rurbis/projects/1
@@ -329,9 +329,9 @@ Revisión integral de las Partes A y B con la pregunta "¿esto lo pueden constru
 
 - [x] ¿Tiene respaldo propio de lo que entrega? (D15) → Sí, en su PC (D130). Sugerirle una segunda copia.
 - [x] **¿Qué formatos entrega a sus clientes?** → JPG y MP4 (D130): RAW/HEIC/HEVC salen del MVP.
-- [~] Carpeta de muestra: llegaron 5 JPG (fuera del repo), pero **comprimidos** (1600 px, 0.3–0.5 MB: el tamaño al que WhatsApp reduce las fotos). **Faltan los originales de ~24 MB y 2–3 videos MP4** para S-1 y S-5; la agencia los manda después.
+- [~] Carpeta de muestra (fuera del repo): el 2026-10-15 llegaron 5 JPG comprimidos por WhatsApp (1600 px, 0.3–0.5 MB); el 2026-10-17, 5 originales, pero en **RAW de la cámara** (`.ARW`, ~24 MB). **Corrección a D130:** los ~24 MB por foto eran el RAW; lo que entrega son JPG exportados de esos RAW, cuyo peso falta medir. **Faltan 3–5 JPG tal como los entrega y 2–3 videos MP4** para S-1 y S-5, y confirmar que nunca entrega `.ARW`.
 - [~] Nombre **de la agencia**: provisional, guardado fuera del repo (D130). **No tiene dominio todavía** (2026-10-15): se necesita antes del lanzamiento (hito 3, D7). Mientras tanto, staging usa `workers.dev` y `run.app`. El de la plataforma ya está resuelto: Focal Drop, focaldrop.com (D118). El DNS vivirá en Cloudflare: lo requieren el dominio del bucket público y el del Worker de ZIP.
-- [~] Referencias para el moodboard: mandó canales de YouTube, no sitios. Se le propusieron 5 sitios para que elija (D130); los está revisando.
+- [~] Referencias para el moodboard: de los 5 sitios propuestos eligió **elizabethmessina.com** (fotos grandes que van pasando una por una, letra elegante) y **jonaspeterson.com** (cinematográfico, foto a pantalla completa con el texto encima). En común: la foto manda, a gran tamaño. Falta saber qué le gustó de cada uno (insumo del hito 2, D24).
 - [ ] Revisión legal del aviso de privacidad (plantilla).
 
 ## 7. Pendientes técnicos
@@ -366,7 +366,7 @@ Revisión integral de las Partes A y B con la pregunta "¿esto lo pueden constru
 |---|---|
 | S1 | ✅ La agencia conserva sus originales en su PC (confirmado el 2026-10-15, D130). |
 | S2 | Zona horaria America/Mexico_City (UTC−6 todo el año), moneda MXN, idioma es-MX. |
-| S3 | Galería típica de **7–24 GB** (300–1,000 fotos de ~24 MB, D130) más videos; ocasionalmente hasta ~50 GB por videos largos. |
+| S3 | Galería típica de 300–1,000 fotos más videos; ocasionalmente hasta ~50 GB por videos largos. **Peso por confirmar** (2026-10-17): los 7–24 GB de D130 partían de ~24 MB por foto, que resultó ser el RAW; se recalcula con los JPG que entrega. |
 | S4 | Ustedes dos son SuperAdmin; no hay onboarding de otras agencias en el MVP. |
 | S5 | Las galerías se sirven bajo el dominio de la agencia (`<dominio>/g/<token>`); el ZIP, bajo `zip.<dominio>`. |
 | S6 | Tamaño máximo por archivo: 50 GB (configurable). |
@@ -481,3 +481,4 @@ Horas reales frente a las estimadas, por issue. Es el insumo de la retro de cada
 | 2026-10-15 | **PR #41:** `uuid` 11.1.1 con `overrides` de npm en `billing-guard` (alerta de Dependabot #1); la función se probó en local con `functions-framework`. |
 | 2026-10-16 | **PR #40 (#10) aprobado** después de probarlo en local: checks en verde, `GET /health` 200, logs JSON, configuración inválida con código 1 y `PORT` de Cloud Run respetado. Las sugerencias van en el siguiente PR de Fabian. |
 | 2026-10-16 | **D131 → PR #42:** Dependabot con *cooldown* de 14 días y sin saltos mayores de `@types/node`. Las cinco actualizaciones del #39 tenían menos de dos semanas publicadas. |
+| 2026-10-17 | **Respuestas de la agencia:** mandó 5 originales, pero en RAW (`.ARW`, ~24 MB). Los ~24 MB de D130 eran el RAW, no el JPG que entrega, así que S3 y el costo de R2 quedan por recalcular; ZIP64 sigue haciendo falta. Se le piden los JPG tal como los entrega y 2–3 MP4. Para el moodboard eligió elizabethmessina.com y jonaspeterson.com. |
